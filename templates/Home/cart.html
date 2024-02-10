@@ -1,0 +1,102 @@
+{% extends "Home/Base.html" %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% block placeholder %}
+	<section id="cart_items">
+		<div class="container">
+			<div class="breadcrumbs">
+				<ol class="breadcrumb">
+				  <li><a href="#">Home</a></li>
+				  <li class="active">Giỏ hàng</li>
+				</ol>
+			</div>
+			<div class="table-responsive cart_info" id="listcart">
+				<table class="table table-condensed" id="cartx">
+					<thead>
+						<tr class="cart_menu">
+							<td class="image">Item</td>
+							<td class="description"></td>
+							<td class="price">Price</td>
+							<td class="quantity">Quantity</td>
+							<td class="total">Total</td>
+							<td></td>
+						</tr>
+					</thead>
+					<tbody>
+                    {% for item in Cart %}
+						<tr>
+							<td class="cart_product">
+								<a href="/product{{ item.id_product }}"><img src="{% static item.image %}" width="110" height="110" alt=""></a>
+							</td>
+							<td class="cart_description">
+								<h4><a href="">{{ item.name_product }}</a></h4>
+							</td>
+							<td class="cart_price">
+								<p>{{ item.price|intcomma }}</p>
+							</td>
+							<td class="cart_quantity">
+								<div class="cart_quantity_button">
+									<input class="cart_quantity_input" type="text" onchange="window.location.reload();UpdateCart({{ item.id_product }})" name="quantity" id="quantity_{{ item.id_product }}" value="{{ item.num }}" autocomplete="off" size="2">
+								</div>
+							</td>
+							<td class="cart_total">
+								<p class="cart_total_price">{{ item.total|intcomma}}</p>
+							</td>
+							<td class="cart_delete">
+								<a class="cart_quantity_delete" onclick="SelectID({{ item.id_product }})" href="" ><i class="fa fa-times"></i></a>
+							</td>
+						</tr>
+                    {% endfor %}
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</section> <!--/#cart_items-->
+
+	<section id="do_action">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-6" id="ttinf">
+					<div class="total_area" id="totalarea">
+						<ul>
+                            <form>
+                                <li><input name="voucher" type="text" placeholder="Mã giảm giá"/></li>
+                            </form>
+							<li>Tổng tiền hàng <span>{{ sum|intcomma }}vnd</span></li>
+                            <li>Mã giảm giá <span>{{ Discount|mul:-1|intcomma }}vnd</span></li>
+							<li>Phí vận chuyển <span>{{ shippingcost|intcomma }}vnd</span></li>
+                            {% if sum %}
+							<li >Tổng tiền <span id="totalcart" >{{ sum|addition:shippingcost|sub:Discount|intcomma }}vnd</span></li>
+                            {% else %}
+                            <li>Tổng tiền <span>vnd</span></li>
+                            {% endif %}
+                            <li>Phương thức thanh toán <span>Thanh toán khi nhận hàng</span></li>
+						</ul>
+					</div>
+				</div>
+                <form id="main-contact-form" class="contact-form row" name="contact-form" method="post">
+                            {% csrf_token %}
+				            <div class="form-group col-md-6">
+				                <input type="text" name="name" id="shipname" class="form-control" required="required" placeholder="Họ tên">
+				            </div>
+				            <div class="form-group col-md-6">
+				                <input type="text" name="numberphone" id="shipphone" class="form-control" required="required" placeholder="Số điện thoại">
+				            </div>
+				            <div class="form-group col-md-6">
+				                <input type="text" name="adress" class="form-control" id="shipaddress" required="required" placeholder="Địa chỉ">
+				            </div>
+				            <div class="form-group col-md-6">
+				                <textarea name="message" id="message" required="required" class="form-control" rows="8" placeholder="Your Message Here"></textarea>
+				            </div>
+				            <div class="form-group col-md-6">
+                                <a type="submit" class="btn btn-primary pull-right" href="{% url 'home' %}" onclick="OrderInCart(), alert('MUA HÀNG THÀNH CÔNG')">Đặt Hàng</a>
+				            </div>
+				        </form>
+			</div>
+		</div>
+	</section><!--/#do_action-->
+{% endblock %}
+
+

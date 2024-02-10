@@ -1,0 +1,20 @@
+{% extends "Home/Base.html" %}
+{% load static %}
+{% block placeholder %}
+	<section id="form"><!--form-->
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-4 col-sm-offset-1">
+					<div class="login-form"><!--login form-->
+						<h2>EDIT PROFILE</h2>
+						<form method="post" >
+                            {% csrf_token %}
+							{{ form.as_p }}
+							<button type="submit" class="btn btn-primary">Lưu</button>
+						</form>
+					</div><!--/login form-->
+				</div>
+			</div>
+		</div>
+	</section><!--/form-->
+{% endblock %}

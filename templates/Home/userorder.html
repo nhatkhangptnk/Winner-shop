@@ -1,0 +1,56 @@
+{% extends "Home/Base.html" %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% block placeholder %}
+	<section id="cart_items">
+		<div class="container">
+			<div class="breadcrumbs">
+				<ol class="breadcrumb">
+				  <li><a href="#">Home</a></li>
+				  <li class="active">Đơn hàng</li>
+				</ol>
+			</div>
+			<div class="table-responsive cart_info" id="listcart">
+				<table class="table table-condensed" id="cartx">
+					<thead>
+						<tr class="cart_menu">
+							<td class="image">Item</td>
+							<td class="description"></td>
+							<td class="price">Price</td>
+							<td class="quantity">Quantity</td>
+							<td class="total">Total</td>
+							<td></td>
+						</tr>
+					</thead>
+					<tbody>
+                    {% for item in OrderDt  %}
+						<tr>
+							<td class="cart_product">
+								<a href="/product{{ item.id }}"><img src="{% static item.product_image %}" width="110" height="110" alt=""></a>
+							</td>
+							<td class="cart_description">
+								<h4><a href="">{{ item.product_name }}</a></h4>
+							</td>
+							<td class="cart_price">
+								<p>{{ item.product_price|intcomma }}</p>
+							</td>
+							<td class="cart_quantity">
+								<div class="cart_quantity_button">
+									<input class="cart_quantity_input" type="text" value="{{ item.product_quantity }}" autocomplete="off" size="2">
+								</div>
+							</td>
+							<td class="cart_total">
+								<p class="cart_total_price">{{ item.amount|intcomma}}</p>
+							</td>
+						</tr>
+                    {% endfor %}
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</section> <!--/#cart_items-->
+{% endblock %}
+
+

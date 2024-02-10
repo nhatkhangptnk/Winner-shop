@@ -1,0 +1,234 @@
+{% extends "Home/base.html" %}
+{% load static %}
+{% load custom_filter %}
+{% block placeholder %}
+    <section>
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-3">
+                <div class="left-sidebar">
+                    <h2>Category</h2>
+                    <div class="panel-group category-products" id="accordian"><!--category-productsr-->
+                        {% for p in parents %}
+                            <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordian" href="#{{ p.id }}">
+                                        {% if p.id|HaveChild %}
+                                        <span class="badge pull-right"><i class="fa fa-plus"></i></span>
+                                        {% endif %}
+                                        {{ p.cate_name }}
+                                    </a>
+                                </h4>
+                            </div>
+                            {% if p.id|HaveChild %}
+                            <div id="{{ p.id}}" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ul>
+                                        {% for c in p.id|GetChild %}
+                                            <li><a href="/list/{{ c.id}}">{{ c.cate_name }} </a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                            {% endif %}
+
+
+                        </div>
+                        {% endfor %}
+
+                    </div><!--/category-products-->
+
+                    <div class="brands_products"><!--brands_products-->
+                        <h2>Brands</h2>
+                        <div class="brands-name">
+                            <ul class="nav nav-pills nav-stacked">
+                                {% for item in brandItems %}
+                                    <li><a href="/products/brands/{{ item.brand_id }}"> <span class="pull-right">{{a}}</span>{{item.brand_name}}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div><!--/brands_products-->
+
+                    <div class="price-range"><!--price-range-->
+                        <h2>Price Range</h2>
+                        <div class="well text-center">
+                            <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="600"
+                                   data-slider-step="5" data-slider-value="[250,450]" id="sl2"><br/>
+                            <b class="pull-left">$ 0</b> <b class="pull-right">$ 600</b>
+                        </div>
+                    </div><!--/price-range-->
+
+                    <div class="shipping text-center"><!--shipping-->
+                        <img src="images/home/shipping.jpg" alt=""/>
+                    </div><!--/shipping-->
+
+                </div>
+            </div>
+				<div class="col-sm-9">
+					<div class="blog-post-area">
+						<h2 class="title text-center">Bài viết gần đây</h2>
+						<div class="single-blog-post">
+							<h3>Giày Bravada Mens Trainers</h3>
+							<div class="post-meta">
+								<ul>
+									<li><i class="fa fa-user"></i> Ngọc Hoài</li>
+									<li><i class="fa fa-clock-o"></i> 1:33 pm</li>
+									<li><i class="fa fa-calendar"></i> May 5, 2022</li>
+								</ul>
+								<span>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star-half-o"></i>
+								</span>
+							</div>
+							<a href="">
+								<img src="{% static 'images/blog/adidas.png' %}" alt="" >
+							</a>
+							<p>
+								Nói đến thương hiệu Adidas thì không thể không nhắc đến các sản phẩm dành cho nam và nữ, trẻ em. Tuy có giá thành không hề rẻ nhưng so với chất lượng, mẫu mã và độ tiện dụng thì quần áo Adidas vẫn rất được ưa chuộng tại các nước trên thế giới trong đó có Việt Nam..</p> <br>
+
+							<p>
+								Adidas luôn là thương hiệu được “vạn người mê” bởi những thiết kế vô cùng đa dạng, với nhiều màu sắc và kích cỡ khác nhau. Các sản phẩm quần áo của Adidas bao gồm áo phông, áo khoác, suit, quần short, quần âu… unisex..</p> <br>
+
+							<p>
+								Với những đôi giày Adidas chính hãng, bạn không chỉ thể hiện phong cách thời trang, cá tính, năng động qua thiết kế bắt mắt mà còn có thể cảm nhận được sự êm ái, thoải mái, nhẹ nhàng của mọi đôi giày. Vì những lý do này, giá của những đôi giày Adidas chính hãng thường rất đắt, thậm chí có những phiên bản đặc biệt và giới hạn có giá lên tới hàng nghìn đô la..</p> <br>
+
+							<div class="pager-area">
+								<ul class="pager pull-right">
+									<li><a href="#">Pre</a></li>
+									<li><a href="#">Next</a></li>
+								</ul>
+							</div>
+						</div>
+					</div><!--/blog-post-area-->
+
+					<div class="rating-area">
+						<ul class="ratings">
+							<li class="rate-this">Đánh giá sản phẩm:</li>
+							<li>
+								<i class="fa fa-star color"></i>
+								<i class="fa fa-star color"></i>
+								<i class="fa fa-star color"></i>
+								<i class="fa fa-star"></i>
+								<i class="fa fa-star"></i>
+							</li>
+							<li class="color">(6 đánh giá)</li>
+						</ul>
+						<ul class="tag">
+							<li>TAG:</li>
+							<li><a class="color" href="">Adidas <span>/</span></a></li>
+							<li><a class="color" href="">Quần <span>/</span></a></li>
+						</ul>
+					</div><!--/rating-area-->
+
+					<div class="socials-share">
+						<a href=""><img src="{% static 'images/blog/socials.png' %}" alt=""></a>
+					</div><!--/socials-share-->
+
+					<div class="media commnets">
+						<a class="pull-left" href="#">
+							<img class="media-object" src="{% static 'images/blog/man-one.jpg' %}" alt="">
+						</a>
+						<div class="media-body">
+							<h4 class="media-heading">Annie Davis</h4>
+							<p>Annie Davis là Chủ tịch Hội đồng quản trị BongoCat. Ông được xem là tỷ phú đô la Mỹ đầu tiên trên sàn chứng khoán Châu Âu từ ngày 7 tháng 3 năm 2011 với giá trị tài sản lên đến khoảng 55 tỷ đô tại thời điểm đó.</p>
+							<div class="blog-socials">
+								<ul>
+									<li><a href=""><i class="fa fa-facebook"></i></a></li>
+									<li><a href=""><i class="fa fa-twitter"></i></a></li>
+									<li><a href=""><i class="fa fa-dribbble"></i></a></li>
+									<li><a href=""><i class="fa fa-google-plus"></i></a></li>
+								</ul>
+								<a class="btn btn-primary" href="">Bài viết khác</a>
+							</div>
+						</div>
+					</div><!--Comments-->
+					<div class="response-area">
+						<h2>3 RESPONSES</h2>
+						<ul class="media-list">
+							<li class="media">
+
+								<a class="pull-left" href="#">
+									<img class="media-object" src="{% static 'images/blog/man-two.jpg' %}" alt="">
+								</a>
+								<div class="media-body">
+									<ul class="sinlge-post-meta">
+										<li><i class="fa fa-user"></i>Xuân Hinh</li>
+										<li><i class="fa fa-clock-o"></i> 12:22</li>
+										<li><i class="fa fa-calendar"></i> MAY 23, 2022</li>
+									</ul>
+									<p>Sản phẩm chất lượng, shop tư vấn rất nhiệt tình.</p>
+									<a class="btn btn-primary" href=""><i class="fa fa-reply"></i>Trả lời</a>
+								</div>
+							</li>
+							<li class="media second-media">
+								<a class="pull-left" href="#">
+									<img class="media-object" src="{% static 'images/blog/man-three.jpg' %}" alt="">
+								</a>
+								<div class="media-body">
+									<ul class="sinlge-post-meta">
+										<li><i class="fa fa-user"></i>Quang Minh</li>
+										<li><i class="fa fa-clock-o"></i> 1:33 pm</li>
+										<li><i class="fa fa-calendar"></i> MAY 7, 2022</li>
+									</ul>
+									<p>Giao hành nhanh.</p>
+									<a class="btn btn-primary" href=""><i class="fa fa-reply"></i>Trả lời</a>
+								</div>
+							</li>
+							<li class="media">
+								<a class="pull-left" href="#">
+									<img class="media-object" src="{% static 'images/blog/man-four.jpg' %}" alt="">
+								</a>
+								<div class="media-body">
+									<ul class="sinlge-post-meta">
+										<li><i class="fa fa-user"></i>Nam Cao</li>
+										<li><i class="fa fa-clock-o"></i> 1:22 am</li>
+										<li><i class="fa fa-calendar"></i> JUNE 5, 2022</li>
+									</ul>
+									<p>5 sao.</p>
+									<a class="btn btn-primary" href=""><i class="fa fa-reply"></i>Trả lời</a>
+								</div>
+							</li>
+						</ul>
+					</div><!--/Response-area-->
+					<div class="replay-box">
+						<div class="row">
+							<div class="col-sm-4">
+								<h2>Hãy để lại bình luận của bạn: </h2>
+								<form>
+									<div class="blank-arrow">
+										<label>Tên:</label>
+									</div>
+									<span>*</span>
+									<input type="text" placeholder="Nhập tên...">
+									<div class="blank-arrow">
+										<label>Email: </label>
+									</div>
+									<span>*</span>
+									<input type="email" placeholder="Nhập email...">
+<!--									<div class="blank-arrow">-->
+<!--										<label>Web Site</label>-->
+<!--									</div>-->
+<!--									<input type="email" placeholder="current city...">-->
+								</form>
+							</div>
+							<div class="col-sm-8">
+								<div class="text-area">
+									<div class="blank-arrow">
+										<label>Nội dung</label>
+									</div>
+									<span>*</span>
+									<textarea name="message" rows="11"></textarea>
+									<a class="btn btn-primary" href="">Đăng bình luận</a>
+								</div>
+							</div>
+						</div>
+					</div><!--/Repaly Box-->
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}

@@ -1,0 +1,265 @@
+{% extends "Home/Base.html" %}
+{% load static %}
+{% load humanize %}
+{% load mathfilters %}
+{% load custom_filter %}
+{% block placeholder %}
+	<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="left-sidebar">
+                    <h2>Category</h2>
+                    <div class="panel-group category-products" id="accordian"><!--category-productsr-->
+                        {% for p in parents %}
+                            <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordian" href="#{{ p.id }}">
+                                        {% if p.id|HaveChild %}
+                                        <span class="badge pull-right"><i class="fa fa-plus"></i></span>
+                                        {% endif %}
+                                        {{ p.cate_name }}
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="{{ p.id}}" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <ul>
+                                        {% if not p.id|HaveChild %}
+                                        <li><a href="/products/categories/{{ p.id}}">all</a></li>
+                                        {% endif %}
+                                        {% for c in p.id|GetChild %}
+                                            <li><a href="/{{ p.cate_name }}/{{ c.id}}">{{ c.cate_name }} </a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        {% endfor %}
+
+                    </div><!--/category-products-->
+
+						<div class="brands_products"><!--brands_products-->
+							<h2>Brands</h2>
+							<div class="brands-name">
+								<ul class="nav nav-pills nav-stacked">
+									{% for item in brandItems %}
+                                    <li><a href="/products/brands/{{ item.brand_id }}"> <span class="pull-right">{{a}}</span>{{item.brand_name}}</a></li>
+                                    {% endfor %}
+								</ul>
+							</div>
+						</div><!--/brands_products-->
+
+						<div class="shipping text-center"><!--shipping-->
+							<img src="{% static 'images/home/shipping.jpg' %}" alt="" />
+						</div><!--/shipping-->
+
+					</div>
+				</div>
+
+				<div class="col-sm-9 padding-right">
+					<div class="product-details"><!--product-details-->
+						<div class="col-sm-5">
+                            <div class="view-product">
+                                {% if ProductDetail.product_quantity == 0 %}
+                                <div style = "background: url({% static ProductDetail.product_imagedetail %})"><img src="{% static 'images/product-details/soldout.png' %}" alt="" /></div>
+                                {% else %}
+                                <img src="{% static ProductDetail.product_imagedetail %}" alt="" />
+                                {% endif %}
+								<h3 onclick="window.open('{% static ProductDetail.product_imagedetail %}')">ZOOM </h3>
+							</div>
+							<div id="similar-product" class="carousel slide" data-ride="carousel">
+
+								  <!-- Wrapper for slides -->
+								    <div class="carousel-inner">
+										<div class="item active">
+                                            {% for i in '123'|make_list %}
+										  <img src="{% static ProductDetail.product_imagedetail %}_{{ i }}.jpg" width="107.477" height="123.762" alt="" onclick="window.open(this.src)">
+                                            {% endfor %}
+										</div>
+										<div class="item">
+										  {% for i in '456'|make_list %}
+										  <img src="{% static ProductDetail.product_imagedetail %}_{{ i }}.jpg" width="107.477" height="123.762" alt="" onclick="window.open(this.src)">
+                                            {% endfor %}
+										</div>
+									</div>
+								  <!-- Controls -->
+								  <a class="left item-control" href="#similar-product" data-slide="prev">
+									<i class="fa fa-angle-left"></i>
+								  </a>
+								  <a class="right item-control" href="#similar-product" data-slide="next">
+									<i class="fa fa-angle-right"></i>
+								  </a>
+							</div>
+						</div>
+
+						<div class="col-sm-7">
+							<div class="product-information"><!--/product-information-->
+								<img src="{% static 'images/product-details/new.jpg' %}" class="newarrival" alt="" />
+								<h2>{{ ProductDetail.product_name }}</h2>
+								<img src="{% static 'images/product-details/rating.png'%}" alt="" />
+								<span>
+                                {% if ProductDetail.saleoff > 0 %}
+                                    <h2><del>{{ ProductDetail.product_price|intcomma }}đ</del></h2>
+                                    <span>{{ ProductDetail.product_price_sale|intcomma }}đ</span>
+                                {% else %}
+                                    <span>{{ ProductDetail.product_price|intcomma }}đ</span>
+                                {% endif %}
+									<label>Quantity:</label>
+									<input type="text" id="number" value="1" />
+
+                                    {% if user.is_authenticated and ProductDetail.product_quantity > 0 %}
+									<a href="" type="button" class="btn btn-fefault cart" onclick="addCart({{ ProductDetail.id }}), alert('Thêm vào giỏ thành công!')">
+										<i class="fa fa-shopping-cart"></i>
+										Mua
+									</a>
+                                    {% elif ProductDetail.product_quantity == 0 %}
+                                        <a href="" type="button" class="btn btn-fefault cart" onclick="alert('Rất tiếc sản phẩm đã bán hết!')">
+										<i class="fa fa-shopping-cart"></i>
+										Mua
+									</a>
+                                    {% else %}
+                                    <a href="/login/?next=/product{{ ProductDetail.id }}/" type="button" class="btn btn-fefault cart">
+										<i class="fa fa-shopping-cart"></i>
+										Mua
+									</a>
+                                    {% endif %}
+								</span>
+                                {% if ProductDetail.product_status == '1' %}
+								<p><b>Trạng thái:</b> Còn hàng</p>
+                                {% else %}
+                                <p><b>Trạng thái:</b> Hết hàng</p>
+                                {% endif %}
+								<p><b>Thương hiệu:</b> {{ ProductDetail.brand_name }}</p>
+                                <p><b>Đã bán:</b> {{ ProductDetail.quantity_sold }}</p>
+
+								<a href=""><img src="{% static 'images/product-details/share.png' %}" class="share img-responsive"  alt="" /></a>
+							</div><!--/product-information-->
+						</div>
+					</div><!--/product-details-->
+
+					<div class="category-tab shop-details-tab"><!--category-tab-->
+						<div class="col-sm-12">
+							<ul class="nav nav-tabs">
+								<li><a href="#details" data-toggle="tab">Details</a></li>
+								<li class="active"><a href="#reviews" data-toggle="tab">Reviews ({{ AllReview|length }})</a></li>
+							</ul>
+						</div>
+						<div class="tab-content">
+							<div class="tab-pane fade" id="details" >
+                                <div class="col-sm-12">
+                                <p>{{ ProductDetail.product_detail }}</p>
+                                </div>
+							</div>
+							<div class="tab-pane fade active in" id="reviews" >
+								<div class="col-sm-12">
+                                    {% for r in AllReview %}
+                                    <ul>
+										<li><a href=""><i class="fa fa-user"></i>{{ r.Name }}</a></li>
+										<li><a href=""><i class="fa fa-clock-o"></i>{{ r.Time }}</a></li>
+										<li><a href=""><i class="fa fa-calendar-o"></i>{{ r.Date }}</a></li>
+									</ul>
+									<p>{{ r.Comment }}</p>
+                                    {% endfor %}
+									<p><b>Write Your Review</b></p>
+
+									<form action="#">
+										<span>
+											<input type="text" id="name_rv" placeholder="Your Name"/>
+											<input type="email" id="email_rv" placeholder="Email Address"/>
+										</span>
+										<textarea name="" id="comment_rv" placeholder="Your Review"></textarea>
+										<b>Rating: </b> <img src="{% static 'images/product-details/rating.png'%}" alt="" />
+										<button type="button" class="btn btn-default pull-right" onclick="GetReview({{ ProductDetail.id}}), window.location.reload()">
+											Submit
+										</button>
+									</form>
+								</div>
+							</div>
+
+						</div>
+					</div><!--/category-tab-->
+
+					<div class="recommended_items"><!--recommended_items-->
+						<h2 class="title text-center">recommended items</h2>
+
+						<div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
+							<div class="carousel-inner">
+								<div class="item active">
+                                    {% for item in ItemActive %}
+									    <div class="col-sm-4">
+                                            <div class="product-image-wrapper">
+                                                <div class="single-products">
+                                                    <div class="productinfo text-center">
+                                                        <a href="/product{{ item.id }}" ><img src="{% static item.product_image %} " width="200" height="200" alt="" style="width: 200px; height: 200px" align="center"/></a>
+                                                        <h2>{{item.product_price_sale|intcomma}}đ</h2>
+                                                        <p>{{item.product_name}}</p>
+                                                        {% if user.is_authenticated %}
+                                                        {% if item.product_quantity > 0  %}
+                                                        <a class="btn btn-default add-to-cart"onclick="addCart({{ item.id }}), alert('Thêm vào giỏ thành công!')"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ</a>
+                                                        {% else %}
+                                                        <a class="btn btn-default add-to-cart"onclick="alert('Rất tiếc sản phẩm đã bán hết!')"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ</a>
+                                                        {% endif %}
+                                                    {% else %}
+                                                       <a href="/login/?next=/" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ</a>
+                                                    {% endif %}
+                                                    </div>
+                                                </div>
+                                                <div class="choose">
+                                                    <ul class="nav nav-pills nav-justified">
+                                                        <li><a href="#" onclick="selectIDfvr({{ item.id }})"><i class="fa fa-plus-square"></i>Yêu thích</a></li>
+                                                        <li><a href="#"><i class="fa fa-plus-square"></i>Add to compare</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+								</div>
+								<div class="item">
+                                    {% for item in Item %}
+									<div class="col-sm-4">
+                                            <div class="product-image-wrapper">
+                                                <div class="single-products">
+                                                    <div class="productinfo text-center">
+                                                        <a href="/product{{ item.id }}" ><img src="{% static item.product_image %} " width="200" height="200" alt="" style="width: 200px; height: 200px" align="center"/></a>
+                                                        <h2>{{item.product_price_sale|intcomma}}đ</h2>
+                                                        <p>{{item.product_name}}</p>
+                                                            {% if user.is_authenticated %}
+                                                        {% if item.product_quantity > 0  %}
+                                                        <a class="btn btn-default add-to-cart"onclick="addCart({{ item.id }}), alert('Thêm vào giỏ thành công!')"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ</a>
+                                                        {% else %}
+                                                        <a class="btn btn-default add-to-cart"onclick="alert('Rất tiếc sản phẩm đã bán hết!')"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ</a>
+                                                        {% endif %}
+                                                    {% else %}
+                                                       <a href="/login/?next=/" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ</a>
+                                                    {% endif %}
+                                                    </div>
+                                                </div>
+                                                <div class="choose">
+                                                    <ul class="nav nav-pills nav-justified">
+                                                        <li><a href="#" onclick="selectIDfvr({{ item.id }})"><i class="fa fa-plus-square"></i>Yêu thích</a></li>
+                                                        <li><a href="#"><i class="fa fa-plus-square"></i>Add to compare</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+								</div>
+							</div>
+							 <a class="left recommended-item-control" href="#recommended-item-carousel" data-slide="prev">
+								<i class="fa fa-angle-left"></i>
+							  </a>
+							  <a class="right recommended-item-control" href="#recommended-item-carousel" data-slide="next">
+								<i class="fa fa-angle-right"></i>
+							  </a>			
+						</div>
+					</div><!--/recommended_items-->
+					
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}
